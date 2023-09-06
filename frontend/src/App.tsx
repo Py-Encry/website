@@ -5,7 +5,9 @@ import { useDisclosure } from '@mantine/hooks';
 import { AppShell, Burger } from '@mantine/core';
 import Header from './components/header';
 import '@mantine/core/styles.css';
+import '@mantine/dropzone/styles.css';
 import Navbar from './components/navbar';
+import Cryptate from './components/cryptate';
 
 function App() {
   const [opened, { toggle }] = useDisclosure();
@@ -21,7 +23,7 @@ function App() {
 
       <AppShell.Navbar p="md"><Navbar/></AppShell.Navbar>
 
-      <AppShell.Main>Main</AppShell.Main>
+      <AppShell.Main><Cryptate/></AppShell.Main>
     </AppShell>
   );
 }
