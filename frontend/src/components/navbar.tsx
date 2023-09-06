@@ -64,16 +64,17 @@ export default function Navbar() {
         bg="var(--mantine-color-blue-light)"
         style={{ borderRadius: rem(10) }}
       >
-        <Flex justify="center" gap="xl" align="center" h={70}>
+        <Flex justify="space" gap="xl" align="center" h={70} w={400}>
           <Avatar
             size="lg"
             variant="filled"
             radius="md"
+            style={{right: rem(10)}}
             src="https://media.licdn.com/dms/image/C4E03AQF6MR1O9b_fJQ/profile-displayphoto-shrink_800_800/0/1516975130767?e=2147483647&v=beta&t=WmQ0SCNuBNNaAmeHhV37X78Dp4WAjSj42AP3XPqBmuE"
           ></Avatar>
-          <Title order={3}>Simon</Title>
+          <Title w={60} order={3}>Simon</Title>
           <Divider orientation="vertical" />
-          <ActionIcon variant="subtle" color="red">
+          <ActionIcon variant="subtle" color="red" style={{right: rem(10)}}>
             <IconLogout2 size="3rem" />
           </ActionIcon>
         </Flex>
