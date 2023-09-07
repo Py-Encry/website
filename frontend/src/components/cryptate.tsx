@@ -35,6 +35,13 @@ export default function Cryptate() {
             decimalSeparator=","
             hideControls
           />
+          <TextInput
+                label="Message"
+                withAsterisk
+                placeholder="Input Message"
+                w={615}>
+            
+          </TextInput>
         </Group>
       );
     } else if (value === 'Cesar Cipher') {
