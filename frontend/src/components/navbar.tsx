@@ -28,6 +28,8 @@ export default function Navbar() {
           leftSection={<IconHome2 />}
           variant="subtle"
           color="green"
+          component='a'
+          href="/"
           active={true}
           style={{ borderRadius: rem(8) }}
         />
@@ -37,6 +39,8 @@ export default function Navbar() {
           variant="subtle"
           color="teal"
           active={true}
+          component='a'
+          href="/cryptate"
           style={{ borderRadius: rem(8) }}
         />
         <NavLink
@@ -44,6 +48,8 @@ export default function Navbar() {
           leftSection={<IconInfoCircle />}
           variant="subtle"
           color="cyan"
+          component='a'
+          href="/about"
           active={true}
           style={{ borderRadius: rem(8) }}
         />
@@ -53,6 +59,7 @@ export default function Navbar() {
           variant="subtle"
           color="grey"
           active={true}
+          component='a'
           style={{ borderRadius: rem(8) }}
           href="https://github.com/meatball133/py-enc_-Website"
         />
@@ -70,7 +77,7 @@ export default function Navbar() {
             variant="filled"
             radius="md"
             style={{right: rem(10)}}
-            src="https://media.licdn.com/dms/image/C4E03AQF6MR1O9b_fJQ/profile-displayphoto-shrink_800_800/0/1516975130767?e=2147483647&v=beta&t=WmQ0SCNuBNNaAmeHhV37X78Dp4WAjSj42AP3XPqBmuE"
+            src="https://cdn.discordapp.com/attachments/1078720261517480048/1104168977212649502/Jakob_Widebrant_my_beloved.gif"
           ></Avatar>
           <Title w={60} order={3}>Simon</Title>
           <Divider orientation="vertical" />
