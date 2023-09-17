@@ -11,18 +11,41 @@ import {
   Stack,
   Button,
   Divider,
+  Notification,
+  Flex,
+  Box,
+  useMantineColorScheme,
+  Title,
+  Badge,
 } from '@mantine/core';
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { Group, Text, rem } from '@mantine/core';
 import { IconUpload, IconPhoto, IconX } from '@tabler/icons-react';
 import { useState } from 'react';
+import { useForm } from '@mantine/form';
+import { encryptApiData } from './api';
+import { relative } from 'path';
 
 export default function Cryptate() {
-  const [value, setValue] = useState('Rail Fence Cipher');
+  const [failed, setFail] = useState(false);
   const [file, setFile] = useState<FileWithPath[]>([]);
+  const { colorScheme, setColorScheme } = useMantineColorScheme();
+
+  const form = useForm({
+    initialValues: {
+      key: 0,
+      message: '',
+      mode: 'Encrypt',
+      method: 'Rail Fence Cipher',
+    },
+  });
 
   const options = () => {
-    if (value === 'Rail Fence Cipher') {
+    const [method, encrypt] = [
+      form.values.method,
+      form.values.mode !== 'Encrypt',
+    ];
+    if (method === 'Rail Fence Cipher') {
       return (
         <Stack>
           <NumberInput
@@ -31,16 +54,18 @@ export default function Cryptate() {
             defaultValue={1}
             decimalSeparator=","
             hideControls
+            {...form.getInputProps('key')}
           />
           <TextInput
             label="Message"
             withAsterisk
             placeholder="Input Message"
-            w={615}
+            disabled={encrypt}
+            {...form.getInputProps('message')}
           ></TextInput>
         </Stack>
       );
-    } else if (value === 'Random') {
+    } else if (method === 'Random') {
       return (
         <Stack>
           <NumberInput
@@ -49,16 +74,18 @@ export default function Cryptate() {
             defaultValue={0}
             decimalSeparator=","
             hideControls
+            {...form.getInputProps('key')}
           />
           <TextInput
             label="Message"
             withAsterisk
             placeholder="Input Message"
-            w={615}
+            disabled={encrypt}
+            {...form.getInputProps('message')}
           ></TextInput>
         </Stack>
       );
-    } else if (value === 'Cesar Cipher') {
+    } else if (method === 'Cesar Cipher') {
       return (
         <Stack>
           <Checkbox>Encrypt</Checkbox>
@@ -69,88 +96,190 @@ export default function Cryptate() {
   };
 
   return (
-    <Fieldset legend="Cryptate">
-      <SegmentedControl
-        onChange={(value) => {
-          setValue(value);
-        }}
-        fullWidth
-        data={['Rail Fence Cipher', 'Random', 'Cesar Cipher']}
-      ></SegmentedControl>
-      <br />
-      <Dropzone
-        onDrop={setFile}
-        onReject={(files) => console.log('rejected files', files)}
-        maxSize={3 * 1024 ** 2}
-        m={20}
-        accept={IMAGE_MIME_TYPE}
-      >
-        <Group
-          justify="center"
-          gap="xl"
-          mih={220}
-          style={{ pointerEvents: 'none' }}
+    <>
+      <Flex justify="center">
+        <Box
+          bg={colorScheme === 'dark' ? 'gray.9' : 'gray.1'}
+          my="xl"
+          p={20}
+          m={10}
+          style={{ width: '70%', borderRadius: '10px' }}
         >
-          <Dropzone.Accept>
-            <IconUpload
-              style={{
-                width: rem(52),
-                height: rem(52),
-                color: 'var(--mantine-color-blue-6)',
-              }}
-              stroke={1.5}
-            />
-          </Dropzone.Accept>
-          <Dropzone.Reject>
-            <IconX
-              style={{
-                width: rem(52),
-                height: rem(52),
-                color: 'var(--mantine-color-red-6)',
-              }}
-              stroke={1.5}
-            />
-          </Dropzone.Reject>
-          <Dropzone.Idle>
-            <IconPhoto
-              style={{
-                width: rem(52),
-                height: rem(52),
-                color: 'var(--mantine-color-dimmed)',
-              }}
-              stroke={1.5}
-            />
-          </Dropzone.Idle>
+          <Title order={1} style={{ textAlign: 'center' }}>
+            Cryptography
+          </Title>
+          <form
+            onSubmit={form.onSubmit((values) =>
+              values.mode === 'Encrypt'
+                ? encryptApiData(values, file, setFail)
+                : ''
+            )}
+          >
+            <Flex wrap="wrap" justify="center">
+              <Dropzone
+                onDrop={setFile}
+                onReject={(files) => console.log('rejected files', files)}
+                maxSize={3 * 1024 ** 2}
+                m={20}
+                accept={IMAGE_MIME_TYPE}
+                bg={colorScheme === 'dark' ? 'gray.8' : 'gray.3'}
+                w="90%"
+              >
+                <Group
+                  justify="center"
+                  gap="xl"
+                  mih={220}
+                  style={{ pointerEvents: 'none' }}
+                >
+                  <Dropzone.Accept>
+                    <IconUpload
+                      style={{
+                        width: rem(52),
+                        height: rem(52),
+                        color: 'var(--mantine-color-blue-6)',
+                      }}
+                      stroke={1.5}
+                    />
+                  </Dropzone.Accept>
+                  <Dropzone.Reject>
+                    <IconX
+                      style={{
+                        width: rem(52),
+                        height: rem(52),
+                        color: 'var(--mantine-color-red-6)',
+                      }}
+                      stroke={1.5}
+                    />
+                  </Dropzone.Reject>
+                  <Dropzone.Idle>
+                    <IconPhoto
+                      style={{
+                        width: rem(52),
+                        height: rem(52),
+                        color: 'var(--mantine-color-dimmed)',
+                      }}
+                      stroke={1.5}
+                    />
+                  </Dropzone.Idle>
 
-          <div>
-            <Text size="xl" inline>
-              Drag images here or click to select files
-            </Text>
-            <Text size="sm" c="dimmed" inline mt={7}>
-              Attach as many files as you like, each file should not exceed 5mb
-            </Text>
-          </div>
-        </Group>
-      </Dropzone>
-      <Group grow>
-        <Fieldset legend="Image" m={20} radius="md">
-          <Image
-            src={file[0] ? URL.createObjectURL(file[0]) : null}
-            alt="Uploaded Image"
-            h={300}
-            fit="contain"
-            fallbackSrc="https://placehold.co/600x400?text=Placeholder"
-          />
-        </Fieldset>
-        <Stack>
-          <Fieldset legend="Settings" m={20} radius="md">
-            {options()}
-          </Fieldset>
-          <Button size="lg" color="teal" mx={20}>
-            Encrypt
-          </Button>
-        </Stack>
-      </Group>
-    </Fieldset>
+                  <div>
+                    <Text size="xl" inline>
+                      Drag images here or click to select files
+                    </Text>
+                    <Text size="sm" c="dimmed" inline mt={7}>
+                      Attach as many files as you like, each file should not
+                      exceed 5mb
+                    </Text>
+                  </div>
+                </Group>
+              </Dropzone>
+              <Flex
+                style={{ width: '100%' }}
+                justify="center"
+                direction="column"
+                align="center"
+              >
+                <Badge
+                  size="lg"
+                  variant="gradient"
+                  gradient={{ from: 'red', to: 'indigo', deg: 323 }}
+                  style={{
+                    position: 'relative',
+                    top: '32px',
+                    zIndex: 2,
+                    right: '43%',
+                  }}
+                >
+                  Preview
+                </Badge>
+                <Box
+                  m={20}
+                  p={0}
+                  style={{
+                    borderRadius: '10px',
+                    border: '2px solid var(--mantine-color-gray-7)',
+                  }}
+                  h={460}
+                  w="90%"
+                >
+                  <Image
+                    style={{ backgroundColor: 'var(--mantine-color-dark-7)' }}
+                    src={file[0] ? URL.createObjectURL(file[0]) : null}
+                    h={450}
+                    alt="Uploaded Image"
+                    fit="contain"
+                  />
+                </Box>
+              </Flex>
+              <Fieldset
+                m={20}
+                p={20}
+                pb={35}
+                radius="md"
+                style={{ width: '90%' }}
+              >
+                <Badge
+                  size="lg"
+                  variant="gradient"
+                  gradient={{ from: 'teal', to: 'lime', deg: 216 }}
+                  style={{
+                    position: 'relative',
+                    bottom: '25px',
+                    zIndex: 2,
+                    right: '40px',
+                  }}
+                >
+                  Configuration
+                </Badge>
+                <Stack>
+                  <SegmentedControl
+                    fullWidth
+                    {...form.getInputProps('method')}
+                    data={['Rail Fence Cipher', 'Random', 'Cesar Cipher']}
+                  ></SegmentedControl>
+                  <SegmentedControl
+                    fullWidth
+                    data={['Encrypt', 'Dycrypt']}
+                    {...form.getInputProps('mode')}
+                  ></SegmentedControl>
+                  <Fieldset legend="Settings" m={20} radius="md">
+                    {options()}
+                  </Fieldset>
+                  <Button size="lg" color="teal" mx={20} type="submit">
+                    Submit
+                  </Button>
+                </Stack>
+              </Fieldset>
+            </Flex>
+          </form>
+        </Box>
+      </Flex>
+      <Flex
+        style={{
+          position: 'fixed',
+          right: 50,
+          bottom: 50,
+        }}
+        direction="column"
+        gap={10}
+      >
+        {' '}
+        <Notification
+          icon={<IconX size="1.5rem" />}
+          color="red"
+          title="Parsing failed"
+          style={(theme) => ({
+            width: 400,
+            height: 75,
+            display: failed ? 'flex' : 'none',
+          })}
+          onClose={() => {
+            setFail(false);
+          }}
+        >
+          An error occured while parsing your file
+        </Notification>
+      </Flex>
+    </>
   );
 }
