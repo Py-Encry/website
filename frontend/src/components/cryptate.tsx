@@ -197,13 +197,22 @@ export default function Cryptate() {
                   p={0}
                   style={{
                     borderRadius: '10px',
-                    border: '2px solid var(--mantine-color-gray-7)',
+                    border: `2px solid ${
+                      colorScheme === 'dark'
+                        ? 'var(--mantine-color-gray-7)'
+                        : 'var(--mantine-color-gray-3)'
+                    }`,
                   }}
                   h={460}
                   w="90%"
                 >
                   <Image
-                    style={{ backgroundColor: 'var(--mantine-color-dark-7)' }}
+                    style={{
+                      backgroundColor:
+                        colorScheme === 'dark'
+                          ? 'var(--mantine-color-dark-7)'
+                          : 'var(--mantine-color-gray-0)',
+                    }}
                     src={file[0] ? URL.createObjectURL(file[0]) : null}
                     h={450}
                     alt="Uploaded Image"
@@ -224,7 +233,7 @@ export default function Cryptate() {
                   gradient={{ from: 'teal', to: 'lime', deg: 216 }}
                   style={{
                     position: 'relative',
-                    bottom: '25px',
+                    bottom: '33px',
                     zIndex: 2,
                     right: '40px',
                   }}
@@ -245,7 +254,13 @@ export default function Cryptate() {
                   <Fieldset legend="Settings" m={20} radius="md">
                     {options()}
                   </Fieldset>
-                  <Button size="lg" color="teal" mx={20} type="submit">
+                  <Button
+                    size="lg"
+                    variant="gradient"
+                    gradient={{ from: 'cyan', to: 'green', deg: 0 }}
+                    mx={20}
+                    type="submit"
+                  >
                     Submit
                   </Button>
                 </Stack>

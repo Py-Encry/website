@@ -9,6 +9,8 @@ import {
   Title,
   ActionIcon,
   Divider,
+  Text,
+  Button,
 } from '@mantine/core';
 import {
   IconHome2,
@@ -18,8 +20,48 @@ import {
   IconStar,
   IconLogout2,
 } from '@tabler/icons-react';
+import { useState } from 'react';
 
 export default function Navbar() {
+  const [logged, setLogged] = useState(false);
+  const login = () => {
+    if (logged) {
+      return (
+        <Container
+          h={70}
+          w={400}
+          fluid
+          bg="var(--mantine-color-blue-light)"
+          style={{ borderRadius: rem(10) }}
+        >
+          <Flex justify="space" gap="xl" align="center" h={70} w={400}>
+            <Avatar
+              size="lg"
+              variant="filled"
+              radius="md"
+              style={{ right: rem(10) }}
+              src="https://cdn.discordapp.com/attachments/1078720261517480048/1104168977212649502/Jakob_Widebrant_my_beloved.gif"
+            ></Avatar>
+            <Title w={60} order={3}>
+              Simon
+            </Title>
+            <Divider orientation="vertical" />
+            <ActionIcon variant="subtle" color="red" style={{ right: rem(10) }}>
+              <IconLogout2 size="3rem" />
+            </ActionIcon>
+          </Flex>
+        </Container>
+      );
+    } else {
+      return (
+        <Stack>
+          <Button variant="light">Sign In</Button>
+          <Button>Sign Up</Button>
+        </Stack>
+      );
+    }
+  };
+
   return (
     <Stack justify="space-between" h={1000}>
       <Stack gap="md" align="stretch">
@@ -28,7 +70,7 @@ export default function Navbar() {
           leftSection={<IconHome2 />}
           variant="subtle"
           color="green"
-          component='a'
+          component="a"
           href="/"
           active={true}
           style={{ borderRadius: rem(8) }}
@@ -39,7 +81,7 @@ export default function Navbar() {
           variant="subtle"
           color="teal"
           active={true}
-          component='a'
+          component="a"
           href="/cryptate"
           style={{ borderRadius: rem(8) }}
         />
@@ -48,7 +90,7 @@ export default function Navbar() {
           leftSection={<IconInfoCircle />}
           variant="subtle"
           color="cyan"
-          component='a'
+          component="a"
           href="/about"
           active={true}
           style={{ borderRadius: rem(8) }}
@@ -59,33 +101,22 @@ export default function Navbar() {
           variant="subtle"
           color="grey"
           active={true}
-          component='a'
+          component="a"
           style={{ borderRadius: rem(8) }}
           href="https://github.com/meatball133/py-enc_-Website"
         />
+        <NavLink
+          label="API"
+          leftSection={<IconStar />}
+          variant="subtle"
+          color="pink"
+          active={true}
+          component="a"
+          href="/api"
+          style={{ borderRadius: rem(8) }}
+        />
       </Stack>
-      <Container
-        h={70}
-        w={400}
-        fluid
-        bg="var(--mantine-color-blue-light)"
-        style={{ borderRadius: rem(10) }}
-      >
-        <Flex justify="space" gap="xl" align="center" h={70} w={400}>
-          <Avatar
-            size="lg"
-            variant="filled"
-            radius="md"
-            style={{right: rem(10)}}
-            src="https://cdn.discordapp.com/attachments/1078720261517480048/1104168977212649502/Jakob_Widebrant_my_beloved.gif"
-          ></Avatar>
-          <Title w={60} order={3}>Simon</Title>
-          <Divider orientation="vertical" />
-          <ActionIcon variant="subtle" color="red" style={{right: rem(10)}}>
-            <IconLogout2 size="3rem" />
-          </ActionIcon>
-        </Flex>
-      </Container>
+      {login()}
     </Stack>
   );
 }
