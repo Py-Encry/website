@@ -10,6 +10,7 @@ import Navbar from "./components/navbar";
 import Cryptate from "./components/cryptate";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/home";
+import About from "./components/about";
 
 function App() {
   const [opened, { toggle }] = useDisclosure();
@@ -32,7 +33,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/cryptate" element={<Cryptate />} />
-            <Route path="/about" element={<Home />} />
+            <Route path="/about" element={<About />} />
           </Routes>
         </BrowserRouter>
       </AppShell.Main>
