@@ -292,7 +292,7 @@ export default function Cryptate() {
             setFail(false);
           }}
         >
-          An error occured while parsing your file
+          An error occurred while parsing your file
         </Notification>
       </Flex>
     </>

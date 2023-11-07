@@ -1,0 +1,22 @@
+.class {
+    color: purple;
+    font-weight: bold;
+    font-size: 0.7em;
+}
+
+.class-header {
+    border-radius: 10px;
+    padding: 10px;
+    display: block;
+    /*border: 1px solid #ccc;*/
+}
+
+.argument {
+    font-weight: 400;
+}
+
+.link-header {
+    margin: 5px;
+    top: 7px;
+    display: block;
+}

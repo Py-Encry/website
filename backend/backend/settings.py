@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'pyenc',
     "corsheaders",
+    'knox',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -147,10 +149,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#REST_FRAMEWORK = {
+REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-#    'DEFAULT_PERMISSION_CLASSES': [
-#        'rest_framework.permissions.DjangoModelPermissions'
-#    ]
-#}
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}

@@ -34,3 +34,43 @@ export async function encryptApiData(data: ApiData, image: FileWithPath[], setFa
 
   await reader.readAsDataURL(image[0]);
 }
+
+export async function signup(username: string, password: string, confirmPassword : String, setFail: any) {
+  try {
+    const response = await fetch('http://127.0.0.1:8000/encrypt/signup/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+    });
+    const json = await response.json();
+  } catch (error) {
+    setFail(true);
+    console.log(error);
+  }
+}
+
+export async function login(username: string, password: string,  setFail: any) {
+  try {
+    const response = await fetch('http://127.0.0.1:8000/api-token-auth/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+    });
+    const json = await response.json();
+    console.log(json)
+  } catch (error) {
+    setFail(true);
+    console.log(error);
+  }
+}
+  

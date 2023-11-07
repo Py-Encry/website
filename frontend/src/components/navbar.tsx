@@ -55,8 +55,8 @@ export default function Navbar() {
     } else {
       return (
         <Stack>
-          <Button variant="light">Sign In</Button>
-          <Button>Sign Up</Button>
+          <Button variant="light" component='a' href='/login'>Sign In</Button>
+          <Button component='a' href='/signup'>Sign Up</Button>
         </Stack>
       );
     }

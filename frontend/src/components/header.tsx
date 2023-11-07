@@ -21,7 +21,7 @@ export default function Header() {
           variant="gradient"
           gradient={{ from: 'green', to: 'blue', deg: 90 }}
         >
-          PyEnc
+          Py-Encry
         </Text>
         <ActionIcon
           variant="outline"
