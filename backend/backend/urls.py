@@ -17,9 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework.authtoken import views
+from pyenc import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('encrypt/', include("pyenc.urls")),
-    path('api-token-auth/', views.obtain_auth_token)
+    path('api-token-auth/', views.CustomAuthToken.as_view()),
+    path('change_password/', views.change_password, name='change_password'),
+    path('change_email/', views.change_email, name='change_email')
 ]

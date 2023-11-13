@@ -11,6 +11,8 @@ import {
   Divider,
   Text,
   Button,
+  Box,
+  useMantineColorScheme,
 } from '@mantine/core';
 import {
   IconHome2,
@@ -21,42 +23,78 @@ import {
   IconLogout2,
 } from '@tabler/icons-react';
 import { useState } from 'react';
+import { userInfoAtom } from '../App';
+import { useAtom } from 'jotai';
+import { useLocalStorage } from '@mantine/hooks';
+import '../css/profile.css';
 
 export default function Navbar() {
-  const [logged, setLogged] = useState(false);
+  const [userInfo, setUserInfo] = useAtom(userInfoAtom);
+  const [value, setValue] = useLocalStorage({
+    key: 'token',
+    defaultValue: null,
+  });
+  const { colorScheme, setColorScheme } = useMantineColorScheme();
   const login = () => {
-    if (logged) {
+    if (userInfo['username']) {
       return (
         <Container
           h={70}
-          w={400}
-          fluid
+          w="100%"
+          m={0}
+          p={0}
           bg="var(--mantine-color-blue-light)"
           style={{ borderRadius: rem(10) }}
         >
-          <Flex justify="space" gap="xl" align="center" h={70} w={400}>
-            <Avatar
-              size="lg"
-              variant="filled"
-              radius="md"
-              style={{ right: rem(10) }}
-              src="https://cdn.discordapp.com/attachments/1078720261517480048/1104168977212649502/Jakob_Widebrant_my_beloved.gif"
-            ></Avatar>
-            <Title w={60} order={3}>
-              Simon
-            </Title>
-            <Divider orientation="vertical" />
-            <ActionIcon variant="subtle" color="red" style={{ right: rem(10) }}>
-              <IconLogout2 size="3rem" />
-            </ActionIcon>
+          <Flex justify="center" align="center" h="100%" w="100%">
+            <Box
+              w="75%"
+              component="a"
+              href="/profile"
+              className={`profile ${colorScheme}`}
+            >
+              <Flex p={5} justify="space" gap="xl" align="center">
+                <Avatar
+                  size="lg"
+                  variant="filled"
+                  radius="md"
+                  style={{ left: rem(2) }}
+                  src="https://cdn.discordapp.com/attachments/1078720261517480048/1104168977212649502/Jakob_Widebrant_my_beloved.gif"
+                ></Avatar>
+                <Title w={60} order={3}>
+                  {userInfo['username']}
+                </Title>
+              </Flex>
+            </Box>
+            <Divider orientation="vertical" w="0.05%"/>
+            <Flex justify="center" align="center" w="25%" h="100%">
+              <ActionIcon
+                style={{borderRadius: "0px 10px 10px 0px"}}
+                variant="subtle"
+                color="red"
+                w="100%"
+                h="100%"
+                onClick={() => {
+                  setUserInfo({ username: null, email: null });
+                  setValue(null);
+                  window.location.href = "/";
+                }}
+              >
+                <IconLogout2 style={{ right: rem(9) }} size="2rem" />
+              </ActionIcon>
+            </Flex>
           </Flex>
         </Container>
       );
     } else {
       return (
         <Stack>
-          <Button variant="light" component='a' href='/login'>Sign In</Button>
-          <Button component='a' href='/signup'>Sign Up</Button>
+          <Button variant="light" component="a" href="/login">
+            Sign In
+          </Button>
+          <Button component="a" href="/signup">
+            Sign Up
+          </Button>
         </Stack>
       );
     }
@@ -103,7 +141,7 @@ export default function Navbar() {
           active={true}
           component="a"
           style={{ borderRadius: rem(8) }}
-          href="https://github.com/meatball133/py-enc_-Website"
+          href="https://github.com/Py-Encry/py-encry"
         />
         <NavLink
           label="API"

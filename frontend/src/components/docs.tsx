@@ -11,7 +11,7 @@ import {
   ActionIcon,
   CopyButton,
 } from '@mantine/core';
-import './docs.css';
+import '../css/docs.css';
 import { useClipboard } from '@mantine/hooks';
 
 function DocsInfo(text: { [key: string]: any }): React.ReactNode[] {

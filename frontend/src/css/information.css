@@ -1,0 +1,15 @@
+.clickbutton.dark {
+    background-color: var(--mantine-color-dark-6);
+}
+
+.clickbutton:hover.dark {
+    background-color: var(--mantine-color-dark-5);
+}
+
+.clickbutton.light {
+    background-color: var(--mantine-color-gray-2);
+}
+
+.clickbutton:hover.light {
+    background-color: var(--mantine-color-gray-1);
+}

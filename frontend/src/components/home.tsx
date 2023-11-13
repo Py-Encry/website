@@ -7,7 +7,7 @@ import {
     IconStar,
     IconPlayerPlay,
   } from '@tabler/icons-react';
-  import classes from './HeroBullets.module.css';
+import classes from '../css/HeroBullets.module.css';
 
 export default function Cryptate() {
   return (

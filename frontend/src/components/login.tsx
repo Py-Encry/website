@@ -13,17 +13,23 @@ import {
   Checkbox,
 } from '@mantine/core';
 import { useState } from 'react';
-import { login } from './api';
+import { Login } from './api';
 import { useForm, isEmail, hasLength } from '@mantine/form';
 import { IconX } from '@tabler/icons-react';
+import { useLocalStorage } from '@mantine/hooks';
+import { userInfoAtom } from '../App';
+import { useAtom } from 'jotai';
+import "../css/information.css"
 
 export function SignIn() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
+  const [value, setValue] = useLocalStorage({ key: 'token', defaultValue: null });
+  const [userInfo, setUserInfo] = useAtom(userInfoAtom)
   const [failed, setFail] = useState([false, '']);
   console.log(failed);
   const form = useForm({
     initialValues: {
-      email: '',
+      username: '',
       password: '',
     },
 
@@ -31,8 +37,7 @@ export function SignIn() {
       password: hasLength(
         { min: 6, max: 64 },
         'Name must be 6-64 characters long'
-      ),
-      email: isEmail('Invalid email'),
+      )
     },
   });
 
@@ -47,14 +52,14 @@ export function SignIn() {
           p="md"
           component="form"
           onSubmit={form.onSubmit((values) => {
-            login(values['email'], values['password'], setFail);
+            Login(values['username'], values['password'], setFail, setValue, setUserInfo);
           })}
         >
           <TextInput
-            placeholder="Your Email-adress"
-            label="Email Adress"
+            placeholder="Your Username"
+            label="Username"
             withAsterisk
-            {...form.getInputProps('email')}
+            {...form.getInputProps('username')}
           />
           <Space h="md" />
           <PasswordInput
@@ -75,16 +80,12 @@ export function SignIn() {
             td="underline"
             component="a"
             href="./signup"
-            bg={colorScheme === 'dark' ? 'dark.6' : 'gray.2'}
+            className={`clickbutton ${colorScheme}`}
             c={colorScheme === 'dark' ? 'white' : 'gray.6'}
             p="md"
             style={{
               borderRadius: '10px',
               cursor: 'pointer',
-
-              '&:hover': {
-                backgroundColor: colorScheme === 'dark' ? 'dark.5' : 'gray.1',
-              },
             }}
           >
             Don't have an accont?, then sign up

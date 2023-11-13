@@ -1,0 +1,9 @@
+.profile:hover.light {
+    background-color: var(--mantine-color-blue-1);
+    border-radius: 10px 0px 0px 10px;
+}
+
+.profile:hover.dark {
+    background-color: var(--mantine-color-blue-light);
+    border-radius: 10px 0px 0px 10px;
+}

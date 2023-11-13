@@ -15,6 +15,10 @@ import About from "./components/about";
 import {Docs} from "./components/docs";
 import {SignIn} from "./components/login";
 import {SignUP} from "./components/signup";
+import { atomWithStorage  } from 'jotai/utils'
+import Profile from "./components/profile/profile";
+
+const userInfoAtom = atomWithStorage('userinfo', {'username': null, 'email': null})
 
 function App() {
   const [opened, { toggle }] = useDisclosure();
@@ -41,6 +45,7 @@ function App() {
             <Route path="/api" element={<Docs />} />
             <Route path="/login" element={<SignIn/>} />
             <Route path="/signup" element={<SignUP/>} />
+            <Route path="/profile" element={<Profile/>} />
           </Routes>
         </BrowserRouter>
       </AppShell.Main>
@@ -49,3 +54,4 @@ function App() {
 }
 
 export default App;
+export { userInfoAtom }
