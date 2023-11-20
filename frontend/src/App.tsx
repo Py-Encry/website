@@ -18,7 +18,7 @@ import {SignUP} from "./components/signup";
 import { atomWithStorage  } from 'jotai/utils'
 import Profile from "./components/profile/profile";
 
-const userInfoAtom = atomWithStorage('userinfo', {'username': null, 'email': null})
+const userInfoAtom = atomWithStorage('userinfo', {'username': null, 'email': null, 'image': null})
 
 function App() {
   const [opened, { toggle }] = useDisclosure();

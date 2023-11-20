@@ -38,7 +38,8 @@ export async function encryptApiData(data: ApiData, image: FileWithPath[], setFa
   await reader.readAsDataURL(image[0]);
 }
 
-export async function signup(email: string, username : String, password: string, confirmPassword : String, setFail: any, setValue: any, setUserInfo: any) {
+export async function Signup(email: string, username : String, password: string, confirmPassword : String, setFail: any, setValue: any, setUserInfo: any) {
+  console.log("hi")
   try {
     const response = await fetch('http://127.0.0.1:8000/encrypt/signup/', {
       method: 'POST',
@@ -75,8 +76,20 @@ export async function Login(username: string, password: string, setFail: any, se
       }),
     });
     const json = await response.json();
-    let {token,  ...info} = json
+    let {token, image,  ...info} = json
     setValue(token)
+    const base64WithoutPrefix = image.replace(/^data:image\/[a-z]+;base64,/, '');
+
+    // Decode base64 string
+    const decodedArray = Uint8Array.from(atob(base64WithoutPrefix), (c) => c.charCodeAt(0));
+
+    // Create a blob from the Uint8Array
+    const blob = new Blob([decodedArray], { type: 'image/png' }); // Adjust the MIME type accordingly
+
+    // Create a data URL from the blob
+    const dataUrl = URL.createObjectURL(blob);
+    console.log(dataUrl)
+    info.image = dataUrl
     setUserInfo(info)
     window.location.href = "/";
   } catch (error) {
@@ -127,6 +140,64 @@ export async function ChangePasswordAPI(password: string, token: string, newPass
     setUserInfo({ username: null, email: null });
     window.location.href = "/";
   } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function UploadProfilePicture(inputImage: File | null, token: string, setUserInfo: any, userInfo: any) {
+  const reader = new FileReader();
+  console.log("Hi")
+
+  reader.onload = async (e) => {
+    const image = e.target?.result;
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/upload_image/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token,
+          image,
+        }),
+      });
+      const json = await response.json();
+      if (inputImage) {
+        const dataUrl = URL.createObjectURL(inputImage);
+        setUserInfo({ ...userInfo, image: dataUrl });
+
+      }
+      console.log("Hi")
+    } catch (error) {
+      //setFail(true);
+      console.log(error);
+    }
+  }
+  if (inputImage) {
+    console.log("Bye2")
+    await reader.readAsDataURL(inputImage);
+  }else{
+    console.log("Bye")
+  }
+}
+
+export async function GetProfilePicture(token: string, userInfo: any) {
+  try {
+    const response = await fetch('http://127.0.0.1:8000/user-profiles/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        token,
+        ...userInfo
+      }),
+    });
+    const json = await response.json();
+    console.log(json)
+  } catch (error) {
+    //setFail(true);
     console.log(error);
   }
 }

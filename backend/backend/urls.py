@@ -18,11 +18,14 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework.authtoken import views
 from pyenc import views
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('encrypt/', include("pyenc.urls")),
     path('api-token-auth/', views.CustomAuthToken.as_view()),
     path('change_password/', views.change_password, name='change_password'),
-    path('change_email/', views.change_email, name='change_email')
+    path('change_email/', views.change_email, name='change_email'),
+    path('upload_image/', views.upload_image, name='upload_image'),
 ]

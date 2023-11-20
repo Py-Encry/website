@@ -1,17 +1,23 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view, authentication_classes,permission_classes
 from django.http import JsonResponse
-from .models import Image
+from .models import Profile
 import base64
 from django.core.files.base import ContentFile
 from pyencry.image_handler import ImageHandler
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-#from rest_framework.permissions import UNAUTHENTICATED_USER
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from knox.auth import TokenAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializers import ProfileSerializer, TokenSerializer
+from rest_framework import generics, permissions
+import io
+from PIL import Image
+from uuid import uuid4
 
 # Create your views here.
 #@permission_classes([UNAUTHENTICATED_USER])
@@ -31,6 +37,7 @@ def signup(request):
 @api_view(['POST'])
 def login(request):
     user = authenticate(username=request.data["username"], password=request.data["password"])
+    profile_image = Profile.objects.filter(user=user)
     if user is not None:
         return JsonResponse({"status": "success"})
     else:
@@ -71,20 +78,41 @@ def encrypt(request):
     image.encode("rail_fence_cipher", key=request.data["data"]["key"], data=request.data["data"]["message"])
     return JsonResponse({"status": "success", "image": image.to_string()})
 
+@authentication_classes([BasicAuthentication])
+@permission_classes([permissions.IsAuthenticated])
+@api_view(['POST'])
+def upload_image(request):
+    user = Token.objects.get(key=request.data["token"]).user
+    profile = Profile.objects.get(user=user)
+    profile.image = decodeDesignImage(request.data["image"])
+    profile.save()
+    return JsonResponse({"status": "success"})
+
+def decodeDesignImage(data):
+    format, imgstr = data.split(';base64,')
+    ext = format.split('/')[-1]
+    data = base64.b64decode(data.split(';base64,')[1])
+    return ContentFile(base64.b64decode(imgstr), name=uuid4().hex + "." + ext)
+
 @api_view(['GET'])
 def get_images(request):
     images = Image.objects.all()
     return JsonResponse({"images": list(images.values())})
     
 class CustomAuthToken(ObtainAuthToken):
+    
     def post(self, request, *args, **kwargs):
-        print(Token.objects.values())
         user = authenticate(username=request.data["username"], password=request.data["password"])
         token, created = Token.objects.get_or_create(user=user)
-        return JsonResponse({
+        profile, created = Profile.objects.get_or_create(user=user)
+        print(profile)
+        with open(f"media/{profile.image}", "rb") as f:
+            encoded_image = base64.b64encode(f.read()).decode('utf-8')
+        #print(encoded_image)
+        return Response({
             'token': token.key,
             'user_id': user.pk,
             'username': user.username,
-            'email': user.email
+            'email': user.email,
+            'image': encoded_image
         })
-

@@ -59,7 +59,7 @@ export default function Navbar() {
                   variant="filled"
                   radius="md"
                   style={{ left: rem(2) }}
-                  src="https://cdn.discordapp.com/attachments/1078720261517480048/1104168977212649502/Jakob_Widebrant_my_beloved.gif"
+                  src={userInfo['image']}
                 ></Avatar>
                 <Title w={60} order={3}>
                   {userInfo['username']}
@@ -75,7 +75,7 @@ export default function Navbar() {
                 w="100%"
                 h="100%"
                 onClick={() => {
-                  setUserInfo({ username: null, email: null });
+                  setUserInfo({ username: null, email: null, image: null });
                   setValue(null);
                   window.location.href = "/";
                 }}

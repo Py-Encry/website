@@ -1,29 +1,32 @@
 import {
-    Text,
-    Box,
-    Container,
-    TextInput,
-    PasswordInput,
-    Space,
-    Button,
-    Center,
-    Flex,
-    Notification,
-    useMantineColorScheme,
-    Checkbox
-  } from '@mantine/core';
+  Text,
+  Box,
+  Container,
+  TextInput,
+  PasswordInput,
+  Space,
+  Button,
+  Center,
+  Flex,
+  Notification,
+  useMantineColorScheme,
+  Checkbox,
+} from '@mantine/core';
 import { useState } from 'react';
-import { signup } from './api';
+import { Signup } from './api';
 import { useForm, isEmail, hasLength, matchesField } from '@mantine/form';
 import { IconX } from '@tabler/icons-react';
 import { useLocalStorage } from '@mantine/hooks';
 import { userInfoAtom } from '../App';
 import { useAtom } from 'jotai';
-import "../css/information.css"
+import '../css/information.css';
 
 export function SignUP() {
-  const [value, setValue] = useLocalStorage({ key: 'token', defaultValue: null });
-  const [userInfo, setUserInfo] = useAtom(userInfoAtom)
+  const [value, setValue] = useLocalStorage({
+    key: 'token',
+    defaultValue: null,
+  });
+  const [userInfo, setUserInfo] = useAtom(userInfoAtom);
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const [failed, setFail] = useState([false, '']);
   const form = useForm({
@@ -34,7 +37,6 @@ export function SignUP() {
       confirmPassword: '',
       confirm: false,
     },
-
     validate: {
       password: hasLength(
         { min: 6, max: 64 },
@@ -42,22 +44,26 @@ export function SignUP() {
       ),
       email: isEmail('Invalid email'),
       confirmPassword: matchesField('password', 'Passwords are not the same'),
-      confirm: (value) => value === true || 'You must agree to sell your privacy',
+      confirm: (value) =>
+        value === true || 'You must agree to sell your privacy',
     },
-  });
+    
+  }
+  );
 
   return (
     <>
       <Container size="xs" px="xs">
         <Box
-        style={{
-          backgroundColor: colorScheme === 'dark' ? 'dark.6' : 'gray.2',
-          borderRadius: '10px',
-        }}
-        p="md"
+          style={{
+            backgroundColor: colorScheme === 'dark' ? 'dark.6' : 'gray.2',
+            borderRadius: '10px',
+          }}
+          p="md"
           component="form"
           onSubmit={form.onSubmit((values) => {
-              signup(
+            console.log('Hi');
+            Signup(
               values['email'],
               values['username'],
               values['password'],
@@ -66,6 +72,7 @@ export function SignUP() {
               setValue,
               setUserInfo
             );
+            console.log('Hi');
           })}
         >
           <TextInput
@@ -98,8 +105,11 @@ export function SignUP() {
             withAsterisk
           />
           <Space h="md" />
-              <Checkbox label="I agree to sell my privacy" {...form.getInputProps('confirm')} />
-              <Space h="lg" />
+          <Checkbox
+            label="I agree to sell my privacy"
+            {...form.getInputProps('confirm')}
+          />
+          <Space h="lg" />
           <Center>
             <Button type="submit">Sign up</Button>
           </Center>
@@ -117,15 +127,14 @@ export function SignUP() {
             style={{
               borderRadius: '10px',
               cursor: 'pointer',
-              }}
-            
+            }}
           >
             Already have an account? then sign in
           </Text>
         </Box>
       </Container>
       <Flex
-      style={{
+        style={{
           position: 'absolute',
           bottom: 50,
           right: 50,
@@ -138,10 +147,10 @@ export function SignUP() {
           color="red"
           title="Login failed"
           style={{
-              width: 400,
-              height: 75,
-              display: failed[0] ? 'flex' : 'none',
-            }}
+            width: 400,
+            height: 75,
+            display: failed[0] ? 'flex' : 'none',
+          }}
           onClose={() => {
             setFail([false, '']);
           }}
