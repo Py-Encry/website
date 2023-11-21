@@ -74,9 +74,17 @@ def change_email(request):
 def encrypt(request):
     header, data = request.data["base64Image"].split(';base64,')
     image_data = base64.b64decode(data)
-    image = ImageHandler.from_string(image_data)
-    image.encode("rail_fence_cipher", key=request.data["data"]["key"], data=request.data["data"]["message"])
-    return JsonResponse({"status": "success", "image": image.to_string()})
+    image = ImageHandler.from_base64(image_data)
+    image.encode(request.data["data"]["method"], key=request.data["data"]["key"], data=request.data["data"]["message"])
+    return JsonResponse({"status": "success", "image": image.to_string().decode('utf-8')})
+
+@api_view(['POST'])
+def decrypt(request):
+    header, data = request.data["base64Image"].split(';base64,')
+    image_data = base64.b64decode(data)
+    image = ImageHandler.from_base64(image_data)
+    message = image.decode("rail_fence_cipher", key=request.data["data"]["key"])
+    return JsonResponse({"status": "success", "message": message})
 
 @authentication_classes([BasicAuthentication])
 @permission_classes([permissions.IsAuthenticated])

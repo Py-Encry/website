@@ -4,6 +4,9 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { MantineProvider, createTheme } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
+import '@mantine/notifications/styles.css';
+
 
 const theme = createTheme({});
 
@@ -12,6 +15,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <MantineProvider theme={theme}>
+      <Notifications/>
       <App />
     </MantineProvider>
 );

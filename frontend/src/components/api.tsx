@@ -3,6 +3,8 @@ import { Dispatch, SetStateAction } from 'react';
 import { useAtom } from 'jotai';
 import { useLocalStorage } from '@mantine/hooks';
 import { userInfoAtom } from '../App';
+import { notifications } from '@mantine/notifications';
+import { IconUpload, IconPhoto, IconX } from '@tabler/icons-react';
 
 interface ApiData {
   key: number;
@@ -58,7 +60,14 @@ export async function Signup(email: string, username : String, password: string,
     setUserInfo(info)
     window.location.href = "/";
   } catch (error) {
-    setFail(true);
+    notifications.show({
+      radius: 'sm',
+      color: 'red',
+      title: 'Signup Failed',
+      message: 'An error occured',
+      icon: <IconX/>,
+    })
+    setFail([true, "An error occured"]);
     console.log(error);
   }
 }
@@ -93,7 +102,13 @@ export async function Login(username: string, password: string, setFail: any, se
     setUserInfo(info)
     window.location.href = "/";
   } catch (error) {
-    setFail(true);
+    notifications.show({
+      radius: 'sm',
+      color: 'red',
+      title: 'login Failed',
+      message: 'Username or password is incorrect',
+      icon: <IconX/>,
+    })
     console.log(error);
   }
 }

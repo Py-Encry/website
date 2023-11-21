@@ -20,6 +20,7 @@ import { useAtom } from 'jotai';
 import { useState, useRef } from 'react';
 import { UploadProfilePicture, GetProfilePicture } from '../api';
 import { useLocalStorage } from '@mantine/hooks';
+import "../../css/profilePage.css"
 
 export default function Profile() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
@@ -67,7 +68,7 @@ export default function Profile() {
                 <IconPhotoFilled/>
                 </ThemeIcon >
                 <Dropzone onDrop={(image) => {UploadProfilePicture(image[0], value ?? "", setUserInfo, userInfo)}}  w={200} h={200} p={0} m={0}>
-            <Image w={200} h={200} radius={10} src={userInfo['image']}></Image>
+                  <Image style={{ pointerEvents: 'all' }} className='profile' w={200} h={200} radius={10} src={userInfo['image']}></Image>
             </Dropzone>
             </Flex>
         </Box>

@@ -44,12 +44,17 @@ export function SignUP() {
       ),
       email: isEmail('Invalid email'),
       confirmPassword: matchesField('password', 'Passwords are not the same'),
-      confirm: (value) =>
-        value === true || 'You must agree to sell your privacy',
+      confirm: (value) => (
+        value ? null : 'You must agree to sell your privacy'),
+      username: hasLength(
+        {min: 3, max: 64},
+        'Name must be 3-64 characters long'
+      )
     },
     
   }
   );
+  console.log(form.values.confirm)
 
   return (
     <>
@@ -142,21 +147,6 @@ export function SignUP() {
         direction="column"
         gap={10}
       >
-        <Notification
-          icon={<IconX size="1.5rem" />}
-          color="red"
-          title="Login failed"
-          style={{
-            width: 400,
-            height: 75,
-            display: failed[0] ? 'flex' : 'none',
-          }}
-          onClose={() => {
-            setFail([false, '']);
-          }}
-        >
-          {failed[1]}
-        </Notification>
       </Flex>
     </>
   );

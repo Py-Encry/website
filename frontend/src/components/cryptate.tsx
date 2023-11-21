@@ -17,6 +17,9 @@ import {
   useMantineColorScheme,
   Title,
   Badge,
+  Modal,
+  Loader,
+  ThemeIcon
 } from '@mantine/core';
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { Group, Text, rem } from '@mantine/core';
@@ -25,10 +28,12 @@ import { useState } from 'react';
 import { useForm } from '@mantine/form';
 import { encryptApiData } from './api';
 import { relative } from 'path';
+import { useDisclosure } from '@mantine/hooks';
 
 export default function Cryptate() {
   const [failed, setFail] = useState(false);
   const [file, setFile] = useState<FileWithPath[]>([]);
+  const [opened, { open, close }] = useDisclosure(false);
   const { colorScheme, setColorScheme } = useMantineColorScheme();
 
   const form = useForm({
@@ -36,7 +41,7 @@ export default function Cryptate() {
       key: 0,
       message: '',
       mode: 'Encrypt',
-      method: 'Rail Fence Cipher',
+      method: 'rail_fence_cipher',
     },
   });
 
@@ -45,7 +50,7 @@ export default function Cryptate() {
       form.values.method,
       form.values.mode !== 'Encrypt',
     ];
-    if (method === 'Rail Fence Cipher') {
+    if (method === 'rail_fence_cipher') {
       return (
         <Stack>
           <NumberInput
@@ -65,7 +70,7 @@ export default function Cryptate() {
           ></TextInput>
         </Stack>
       );
-    } else if (method === 'Random') {
+    } else if (method === 'random_spacing') {
       return (
         <Stack>
           <NumberInput
@@ -108,12 +113,15 @@ export default function Cryptate() {
           <Title order={1} style={{ textAlign: 'center' }}>
             Cryptography
           </Title>
-          <form
-            onSubmit={form.onSubmit((values) =>
+          <Box
+            component="form"
+            onSubmit={
+              form.onSubmit((values) =>
               values.mode === 'Encrypt'
                 ? encryptApiData(values, file, setFail)
-                : ''
-            )}
+                : '')
+            }
+            
           >
             <Flex wrap="wrap" justify="center">
               <Dropzone
@@ -244,7 +252,10 @@ export default function Cryptate() {
                   <SegmentedControl
                     fullWidth
                     {...form.getInputProps('method')}
-                    data={['Rail Fence Cipher', 'Random', 'Cesar Cipher']}
+                    data={[
+                      { label: 'Rail Fence Cipher', value: 'rail_fence_cipher' },
+                      { label: 'Random Spacing', value: 'random_spacing' }
+                    ]}
                   ></SegmentedControl>
                   <SegmentedControl
                     fullWidth
@@ -260,13 +271,14 @@ export default function Cryptate() {
                     gradient={{ from: 'cyan', to: 'green', deg: 0 }}
                     mx={20}
                     type="submit"
+                    onClick={() => {open()}}
                   >
                     Submit
                   </Button>
                 </Stack>
               </Fieldset>
             </Flex>
-          </form>
+          </Box>
         </Box>
       </Flex>
       <Flex
@@ -278,23 +290,22 @@ export default function Cryptate() {
         direction="column"
         gap={10}
       >
-        {' '}
-        <Notification
-          icon={<IconX size="1.5rem" />}
-          color="red"
-          title="Parsing failed"
-          style={(theme) => ({
-            width: 400,
-            height: 75,
-            display: failed ? 'flex' : 'none',
-          })}
-          onClose={() => {
-            setFail(false);
-          }}
-        >
-          An error occurred while parsing your file
-        </Notification>
       </Flex>
+      <Modal opened={opened} w={500} h={200} onClose={close} centered>
+        <Container w={400} h={150}>
+        <Box m="auto" h={100} w={300} style={{ border: `2px solid ${
+                      colorScheme === 'dark'
+                        ? 'var(--mantine-color-gray-8)'
+                        : 'var(--mantine-color-gray-3)'}`,
+                        borderRadius: "15px"}}>
+          <Flex w="100%" h="100%" justify="space-around" align="center">
+        <ThemeIcon style={{position: "relative", right: "20px"}} variant={failed ? "filled" : "light"} radius={100} size={75} color={failed ? "red" : "teal"}>{failed ?  <IconX size={45}/> : <Loader color="blue" size="lg" type="dots" />}</ThemeIcon>
+        <Text style={{position: "relative", right: "20px"}}>{failed? "An error occurred" : "Encrypting..."}</Text>
+        </Flex>
+        </Box>
+        </Container>
+      </Modal>
+
     </>
   );
 }
