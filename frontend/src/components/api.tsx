@@ -5,6 +5,8 @@ import { useLocalStorage } from '@mantine/hooks';
 import { userInfoAtom } from '../App';
 import { notifications } from '@mantine/notifications';
 import { IconUpload, IconPhoto, IconX } from '@tabler/icons-react';
+import { ActionIcon } from '@mantine/core';
+import { IconDownload } from "@tabler/icons-react";
 
 interface ApiData {
   key: number;
@@ -13,7 +15,7 @@ interface ApiData {
   message: string | null;
 }
 
-export async function encryptApiData(data: ApiData, image: FileWithPath[], setFail: Dispatch<SetStateAction<boolean>>) {
+export async function encryptApiData(data: ApiData, image: FileWithPath[], setStatus: any) {
   const reader = new FileReader();
 
   reader.onload = async (e) => {
@@ -31,8 +33,22 @@ export async function encryptApiData(data: ApiData, image: FileWithPath[], setFa
         }),
       });
       const json = await response.json();
+
+      const base64WithoutPrefix = json.image.replace(/^data:image\/[a-z]+;base64,/, '');
+
+      // Decode base64 string
+      const decodedArray = Uint8Array.from(atob(base64WithoutPrefix), (c) => c.charCodeAt(0));
+  
+      // Create a blob from the Uint8Array
+      const blob = new Blob([decodedArray], { type: 'image/png' }); // Adjust the MIME type accordingly
+  
+      // Create a data URL from the blob
+      const dataUrl = URL.createObjectURL(blob);
+      const link = <ActionIcon component="a" href={dataUrl} download="filename.png"><IconDownload/></ActionIcon>
+
+      setStatus({failed: false, success: true, message: "Success", link: link});
     } catch (error) {
-      setFail(true);
+      setStatus({failed: true, success: false, message: "An error occured"});
       console.log(error);
     }
   };

@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'pyenc',
     "corsheaders",
-    'knox',
     'rest_framework.authtoken'
 ]
 

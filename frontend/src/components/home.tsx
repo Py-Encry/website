@@ -8,14 +8,14 @@ import {
     IconPlayerPlay,
   } from '@tabler/icons-react';
 import classes from '../css/HeroBullets.module.css';
-
+// className={classes.highlight}
 export default function Cryptate() {
   return (
     <Container fluid>
       <Flex>
         <Container style={{ width: "55%" }}>
           <Title>
-            Able to <span className={classes.highlight}>securley</span> hide information right infront of someones eyes
+            Able to <Text fw={850} fz={40} span gradient={{ from: 'blue', to: 'green', deg: 246 }}      variant="gradient">Securley</Text> hide information right infront of someones eyes
           </Title>
           <Space h="md" />
           <Text>

@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from drf_extra_fields.fields import Base64ImageField
 from rest_framework.authtoken.models import Token
 
 class Image(models.Model):

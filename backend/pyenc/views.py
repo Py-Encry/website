@@ -27,6 +27,7 @@ def signup(request):
     user = User.objects.create_user(email=request.data["email"], username=request.data["username"], password=request.data["password"])
     user.save()
     token, created = Token.objects.get_or_create(user=user)
+    profile, created = Profile.objects.get_or_create(user=user)
     return JsonResponse({ 
             'token': token.key,
             'user_id': user.pk,
@@ -112,8 +113,8 @@ class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         user = authenticate(username=request.data["username"], password=request.data["password"])
         token, created = Token.objects.get_or_create(user=user)
-        profile, created = Profile.objects.get_or_create(user=user)
-        print(profile)
+        print(token.user)
+        profile, created = Profile.objects.get_or_create(user=token.user)
         with open(f"media/{profile.image}", "rb") as f:
             encoded_image = base64.b64encode(f.read()).decode('utf-8')
         #print(encoded_image)
