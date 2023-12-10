@@ -21,6 +21,7 @@ import {
   IconInfoCircle,
   IconStar,
   IconLogout2,
+  IconSun, IconMoonStars
 } from '@tabler/icons-react';
 import { useState } from 'react';
 import { userInfoAtom } from '../App';
@@ -154,7 +155,12 @@ export default function Navbar() {
           style={{ borderRadius: rem(8) }}
         />
       </Stack>
+      <Stack gap="lg">
+          <Button variant="light" component="a" onClick={() => setColorScheme(colorScheme === 'dark' ? 'light' : 'dark')} rightSection={colorScheme === 'dark' ? <IconSun /> : <IconMoonStars />} color={colorScheme === "dark" ? 'yellow' : 'blue'}>
+            Toggle color scheme
+          </Button>
       {login()}
+      </Stack>
     </Stack>
   );
 }

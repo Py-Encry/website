@@ -23,14 +23,6 @@ export default function Header() {
         >
           Py-Encry
         </Text>
-        <ActionIcon
-          variant="outline"
-          color={colorScheme === "dark" ? 'yellow' : 'blue'}
-          onClick={() => setColorScheme(colorScheme === 'dark' ? 'light' : 'dark')}
-          title="Toggle color scheme"
-        >
-          {colorScheme === 'dark' ? <IconSun /> : <IconMoonStars />}
-        </ActionIcon>
       </Group>
     </Container>
   );
