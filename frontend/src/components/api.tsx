@@ -56,6 +56,42 @@ export async function encryptApiData(data: ApiData, image: FileWithPath[], setSt
   await reader.readAsDataURL(image[0]);
 }
 
+export async function decryptApiData(data: ApiData, image: FileWithPath[], setStatus: any) {
+  const reader = new FileReader();
+
+  reader.onload = async (e) => {
+    const base64Image = e.target?.result;
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/encrypt/decrypt/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          data,
+          base64Image,
+        }),
+      });
+      const json = await response.json();
+  
+      // Create a blob from the Uint8Array
+      const blob = new Blob([json.message], { type: 'text/plain' }); // Adjust the MIME type accordingly
+  
+      // Create a data URL from the blob
+      const dataUrl = URL.createObjectURL(blob);
+      const link = <ActionIcon component="a" href={dataUrl} download="filename.txt"><IconDownload/></ActionIcon>
+
+      setStatus({failed: false, success: true, message: "Success", link: link});
+    } catch (error) {
+      setStatus({failed: true, success: false, message: "An error occured"});
+      console.log(error);
+    }
+  };
+
+  await reader.readAsDataURL(image[0]);
+}
+
 export async function Signup(email: string, username : String, password: string, confirmPassword : String, setFail: any, setValue: any, setUserInfo: any) {
   console.log("hi")
   try {

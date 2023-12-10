@@ -26,7 +26,7 @@ import { Group, Text, rem } from "@mantine/core";
 import { IconUpload, IconPhoto, IconX } from "@tabler/icons-react";
 import { useState } from "react";
 import { useForm } from "@mantine/form";
-import { encryptApiData } from "./api";
+import { encryptApiData, decryptApiData } from "./api";
 import { relative } from "path";
 import { useDisclosure } from "@mantine/hooks";
 import { CryptateModal } from "./cryptateModal";
@@ -45,12 +45,6 @@ export default function Cryptate() {
       method: "rail_fence_cipher",
     },
   });
-
-  const model = () => {
-    if (failed) {
-      return <></>;
-    }
-  };
 
   const options = () => {
     const [method, encrypt] = [
@@ -125,7 +119,7 @@ export default function Cryptate() {
             onSubmit={form.onSubmit((values) =>
               values.mode === "Encrypt"
                 ? encryptApiData(values, file, setFail)
-                : ""
+                : decryptApiData(values, file, setFail)
             )}
           >
             <Flex wrap="wrap" justify="center">

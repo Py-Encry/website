@@ -36,7 +36,7 @@ export function SignIn() {
     validate: {
       password: hasLength(
         { min: 6, max: 64 },
-        'Name must be 6-64 characters long'
+        'Password must be 6-64 characters long'
       )
     },
   });
@@ -101,21 +101,6 @@ export function SignIn() {
         direction="column"
         gap={10}
       >
-        <Notification
-          icon={<IconX size="1.5rem" />}
-          color="red"
-          title="Login failed"
-          style={{
-            width: 400,
-            height: 75,
-            display: failed[0] ? 'flex' : 'none',
-          }}
-          onClose={() => {
-            setFail([false, '']);
-          }}
-        >
-          {failed[1]}
-        </Notification>
       </Flex>
     </>
   );
