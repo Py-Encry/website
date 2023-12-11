@@ -64,7 +64,7 @@ export function CryptateModal(input: CryptateModalInterface) {
         >
           <Flex w="100%" h="100%" justify="space-around" align="center">
             <ThemeIcon
-              style={{ position: "relative", right: "20px" }}
+              style={{ position: "relative" }}
               variant={failed ? "filled" : "light"}
               radius={100}
               size={75}
@@ -72,7 +72,7 @@ export function CryptateModal(input: CryptateModalInterface) {
             >
               {icon()}
             </ThemeIcon>
-            <Text style={{ position: "relative", right: "20px" }}>
+            <Text style={{ position: "relative" }}>
               {text()}
             </Text>
             <div>

@@ -44,7 +44,7 @@ export async function encryptApiData(data: ApiData, image: FileWithPath[], setSt
   
       // Create a data URL from the blob
       const dataUrl = URL.createObjectURL(blob);
-      const link = <ActionIcon component="a" href={dataUrl} download="filename.png"><IconDownload/></ActionIcon>
+      const link = <ActionIcon component="a" href={dataUrl} size={70} radius="lg" download="filename.png"><IconDownload size={35}/></ActionIcon>
 
       setStatus({failed: false, success: true, message: "Success", link: link});
     } catch (error) {
@@ -80,7 +80,7 @@ export async function decryptApiData(data: ApiData, image: FileWithPath[], setSt
   
       // Create a data URL from the blob
       const dataUrl = URL.createObjectURL(blob);
-      const link = <ActionIcon component="a" href={dataUrl} download="filename.txt"><IconDownload/></ActionIcon>
+      const link = <ActionIcon component="a" href={dataUrl} size={70} radius="lg" download="filename.txt"><IconDownload size={35}/></ActionIcon>
 
       setStatus({failed: false, success: true, message: "Success", link: link});
     } catch (error) {

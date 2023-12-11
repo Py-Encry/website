@@ -84,9 +84,7 @@ export default function ChangePassword() {
           <Text span c="orange">
             You will afterwards be signed out on all platforms and will have to
             sign in again.
-          </Text>{' '}
-          If you have any issues, then it sounds like you have skill issues and
-          should gain some skills to solve your problem.
+          </Text>
         </Text>
         <Center>
           <Button type="submit" m={10}>
